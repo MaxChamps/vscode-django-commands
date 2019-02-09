@@ -1,0 +1,42 @@
+{
+    "name": "django-commands",
+    "displayName": "Django Commands",
+    "description": "Find and run Django commands easily wihtout leaving VS Code.",
+    "publisher": "MaxChamps",
+    "repository": "git@github.com:MaxChamps/django-commands.git",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.31.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onCommand:djangoCommands.run",
+        "onCommand:djangoCommands.list"
+    ],
+    "main": "./src/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "djangoCommands.run",
+                "title": "Django Commands: Run"
+            },
+            {
+                "command": "djangoCommands.list",
+                "title": "Django Commands: List "
+            }
+        ]
+    },
+    "scripts": {
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^3.3.1",
+        "vscode": "^1.1.28",
+        "eslint": "^5.13.0",
+        "@types/node": "^10.12.21",
+        "@types/mocha": "^2.2.42"
+    }
+}
