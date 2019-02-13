@@ -9,8 +9,8 @@ const WORKSPACE_PATH = vscode.workspace.rootPath;
 const PYTHON_PATH = vscode.workspace.getConfiguration("python").pythonPath;
 
 /**
- * Entry point of the command. Validate thta the project is a Django app then
- * start the command.
+ * Entry point of the command. Validates that the project is a Django app then
+ * starts the command.
  */
 function execute() {
     util.isDjangoProject().then(isDjangoProject => {
@@ -80,7 +80,9 @@ function runCommand(fullCommand) {
 
     const terminal = vscode.window.createTerminal("Django Commands");
     terminal.sendText(command);
-    terminal.show();
+
+    const conf = vscode.workspace.getConfiguration("djangoCommands");
+    if (conf.get("showTerminalOnCommand")) terminal.show();
 }
 
 module.exports = {
