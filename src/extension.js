@@ -1,7 +1,6 @@
 const vscode = require("vscode");
 
-const listCommand = require("./list");
-const runCommand = require("./run");
+const runCommand = require("./commands/run");
 
 // This method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -12,12 +11,7 @@ function activate(context) {
         runCommand.execute();
     });
 
-    let listCommandsDisposable = vscode.commands.registerCommand("djangoCommands.list", () => {
-        listCommand.execute();
-    });
-
     context.subscriptions.push(runCommandDisposable);
-    context.subscriptions.push(listCommandsDisposable);
 }
 
 // this method is called when your extension is deactivated

@@ -4,7 +4,7 @@
     "description": "Find and run Django commands easily wihtout leaving VS Code.",
     "publisher": "MaxChamps",
     "repository": "git@github.com:MaxChamps/django-commands.git",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "engines": {
         "vscode": "^1.31.0"
     },
@@ -12,8 +12,7 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:djangoCommands.run",
-        "onCommand:djangoCommands.list"
+        "onCommand:djangoCommands.run"
     ],
     "main": "./src/extension.js",
     "contributes": {
@@ -23,10 +22,21 @@
                 "title": "Django Commands: Run"
             },
             {
-                "command": "djangoCommands.list",
-                "title": "Django Commands: List "
+                "command": "djangoCommands.history",
+                "title": "Django Commands: History"
             }
-        ]
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "Django Commands configuration",
+            "properties": {
+                "djangoCommands.historyMaxLength": {
+                    "type": "int",
+                    "default": 100,
+                    "description": "Number of commands previously executed when executing 'Django Commands: History'"
+                }
+            }
+        }
     },
     "scripts": {
         "postinstall": "node ./node_modules/vscode/bin/install",
