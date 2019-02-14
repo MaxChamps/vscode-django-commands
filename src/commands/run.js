@@ -3,10 +3,12 @@ const cp = require("child_process");
 
 const util = require("../util");
 
+const { runCommand } = require("./common");
+
 const { NOT_DJANGO_PROJECT_MSG, ERROR_MSG } = require("../constants");
 
 const WORKSPACE_PATH = vscode.workspace.rootPath;
-const PYTHON_PATH = vscode.workspace.getConfiguration("python").pythonPath;
+const PYTHON_PATH = vscode.workspace.getConfiguration("python").get("pythonPath");
 
 /**
  * Entry point of the command. Validates that the project is a Django app then
@@ -64,25 +66,6 @@ function selectCommand(selectedDjangoCommand) {
     vscode.window.showInputBox({ value, valueSelection }).then(fullCommand => {
         runCommand(fullCommand);
     });
-}
-
-/**
- * Runs the command entered in the input box by the user in the integrated terminal
- * of VS Code.
- *
- * Running inside integrated to make the output of the command available to debugging
- * or simply get the output if needed.
- *
- * @param {*} fullCommand The Django command (with arguments)
- */
-function runCommand(fullCommand) {
-    const command = `cd ${WORKSPACE_PATH} && ${PYTHON_PATH} manage.py ${fullCommand}`;
-
-    const terminal = vscode.window.createTerminal("Django Commands");
-    terminal.sendText(command);
-
-    const conf = vscode.workspace.getConfiguration("djangoCommands");
-    if (conf.get("showTerminalOnCommand")) terminal.show();
 }
 
 module.exports = {
