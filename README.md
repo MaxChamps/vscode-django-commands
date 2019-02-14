@@ -1,65 +1,47 @@
-# django-commands README
+# Django Commands - VS Code Extension
 
-This is the README for your extension "django-commands". After writing up a brief description, we recommend including the following sections.
+A small VS Code extension for Django projects allowing developers to run commands directly within VS Code.
+
+\* Extension still in development, contributions are welcome :)
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+### List available commands
 
-For example if there is an image subfolder under your extension project workspace:
+By invoking the VS Code command pallette and executing 'Django Commands: Run', a list of all available commands for the project is displayed, and by selecting one of the choices, you can execute it as is or add arguments if needed.
 
-\!\[feature X\]\(images/feature-x.png\)
+### Executed commands history
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+By invoking the VS Code command pallette and executing 'Django Commands: History', a list of all the previously executed Django commands is displayed (with arguments). You can run them again by selecting the right one in the list.
 
-## Requirements
+## Roadmap
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+Features to add:
+
+-   Automatically fetch the Django commands history without the need to specify a history file path
+-   Add new setting to allow users to ignore command names when executing 'Django Commands: History'
+
+Bugs to fix:
+
+-   Make the extension work when in a multi-root workspace
+
+## Known issues
+
+-   Extension can't be executed within a multi-root workspace
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
 This extension contributes the following settings:
 
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
+-   `djangoCommands.historyMaxLength`: Number of commands previously executed listed on 'Django Commands: History'
+-   `djangoCommands.showTerminalOnCommand`: Open (or don't open) the terminal when a Django command is executed to see its progress.
+-   `djangoCommands.historyFilePath`: Shell history file path. Depends on the shell used (ex: bash vs zsh). Required to query the appropriate Django commands history.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+### 0.1.0
 
-### 1.0.0
+Initial release with very basic, but stull useful, functionnalities:
 
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+-   Listing all available Django commands and executing the selected one
+-   Listing all the previously executed Django commands (with arguments) and re-execute the selected one.
