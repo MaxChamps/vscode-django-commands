@@ -40,11 +40,6 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Open terminal when a Django command is executed to see its progress."
-                },
-                "djangoCommands.historyFilePath": {
-                    "type": "string",
-                    "default": "/User",
-                    "description": "Shell history file path. Depends on the shell used (ex: bash vs zsh). Required to query the appropriate Django commands history."
                 }
             }
         }

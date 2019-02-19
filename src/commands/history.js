@@ -1,73 +1,45 @@
 const vscode = require("vscode");
-const cp = require("child_process");
 
 const util = require("../util");
 
 const { runCommand } = require("./common");
 
-const {
-    NOT_DJANGO_PROJECT_MSG,
-    CONFIGURATION_NAMESPACE,
-    HISTORY_MAX_LENGTH_PROPERTY,
-    HISTORY_FILE_PATH_PROPERTY,
-    NO_COMMANDS_WARNING_MSG
-} = require("../constants");
-
-const HISTORY_FILE_PATH = vscode.workspace.getConfiguration(CONFIGURATION_NAMESPACE).get(HISTORY_FILE_PATH_PROPERTY);
+const { NOT_DJANGO_PROJECT_MSG, NO_COMMANDS_WARNING_MSG, STATE_COMMANDS_KEY } = require("../constants");
 
 /**
  * Entry point of the command. Validates that the project is a Django app then
  * starts the command.
+ *
+ * @param {vscode.ExtensionContext} context
  */
-function execute() {
+function execute(context) {
     util.isDjangoProject().then(isDjangoProject => {
         if (!isDjangoProject) {
             vscode.window.showErrorMessage(NOT_DJANGO_PROJECT_MSG);
         } else {
-            showCommandHistory();
+            showCommandHistory(context);
         }
     });
 }
 
 /**
- * Queries all the previously executed Django commands (not only the active project)
- * and displays them in a quick pick.
+ * Queries all the previously executed Django commands only for this workspace
+ * and lists them in a selectable quick pick.
+ *
+ * @param {vscode.ExtensionContext} context
  */
-function showCommandHistory() {
-    const conf = vscode.workspace.getConfiguration(CONFIGURATION_NAMESPACE);
-    let historyMaxLength = conf.get(HISTORY_MAX_LENGTH_PROPERTY);
-    if (historyMaxLength < 1) historyMaxLength = 100;
+function showCommandHistory(context) {
+    // Getting the workspace state of the extension and needed configurations
+    const extensionState = context.workspaceState;
+    let executedCommands = extensionState.get(STATE_COMMANDS_KEY);
 
-    // Retrieving the commands this way to get every command executed in all terminals
-    // across the machine if more than one terminal used
-    const command = `cat ${HISTORY_FILE_PATH} | grep -e 'python manage.py' -e './manage.py' | head -n ${historyMaxLength}`;
+    if (executedCommands === undefined || executedCommands.length == 0) {
+        vscode.window.showInformationMessage(NO_COMMANDS_WARNING_MSG);
+        return;
+    }
 
-    cp.exec(command, (err, stdout) => {
-        if (err) {
-            vscode.window.showErrorMessage(err.message);
-            return;
-        }
-
-        // Each command is listed on its own line
-        const fullDjangoCommands = stdout.split("\n");
-
-        // If there is no command found or the only one is empty, stop processing
-        if (fullDjangoCommands.lastIndexOf === 0 || fullDjangoCommands[0].trim() === "") {
-            vscode.window.showWarningMessage(NO_COMMANDS_WARNING_MSG);
-            return;
-        }
-
-        // Making sure that the only characters shown in the quick pick are the command name and arguments
-        let cleanedDjangoCommands = [];
-        fullDjangoCommands.forEach(command => {
-            if (command === "") return;
-            command = command.split("manage.py")[1].trim();
-            cleanedDjangoCommands.push(command);
-        });
-
-        vscode.window.showQuickPick(cleanedDjangoCommands).then(fullCommand => {
-            runCommand(fullCommand);
-        });
+    vscode.window.showQuickPick(executedCommands).then(fullCommand => {
+        runCommand(context, fullCommand);
     });
 }
 

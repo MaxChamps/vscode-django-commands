@@ -13,13 +13,15 @@ const PYTHON_PATH = vscode.workspace.getConfiguration("python").get("pythonPath"
 /**
  * Entry point of the command. Validates that the project is a Django app then
  * starts the command.
+ *
+ * @param {vscode.ExtensionContext} context
  */
-function execute() {
+function execute(context) {
     util.isDjangoProject().then(isDjangoProject => {
         if (!isDjangoProject) {
             vscode.window.showErrorMessage(NOT_DJANGO_PROJECT_MSG);
         } else {
-            showAvailableCommands();
+            showAvailableCommands(context);
         }
     });
 }
@@ -27,8 +29,10 @@ function execute() {
 /**
  * Queries all the available Django commands of the project and displays them
  * in a quick pick.
+ *
+ * @param {vscode.ExtensionContext} context
  */
-function showAvailableCommands() {
+function showAvailableCommands(context) {
     // Retrieving the commands this way to not only include the commands created
     // inside the project, but also the ones included with Django.
     const command = `cd ${WORKSPACE_PATH} && ${PYTHON_PATH} manage.py help --commands`;
@@ -42,7 +46,7 @@ function showAvailableCommands() {
         const commands = stdout.split("\n");
 
         vscode.window.showQuickPick(commands).then(selectedCommand => {
-            selectCommand(selectedCommand);
+            selectCommand(context, selectedCommand);
         });
     });
 }
@@ -51,9 +55,10 @@ function showAvailableCommands() {
  * Executed once the user clicks on a command in the quick pick.
  * Opens a user input box with the selected command prefilled.
  *
- * @param {string} selectedDjangoCommand The name of the Django command
+ * @param {vscode.ExtensionContext} context
+ * @param {string} selectedDjangoCommand
  */
-function selectCommand(selectedDjangoCommand) {
+function selectCommand(context, selectedDjangoCommand) {
     // Happens usually when a user clicks outside the quick pick or press
     // escape.
     if (selectedDjangoCommand === undefined) return;
@@ -64,7 +69,7 @@ function selectCommand(selectedDjangoCommand) {
     // When both values are the same, the cursor is set at the given character.
     const valueSelection = [value.length, value.length];
     vscode.window.showInputBox({ value, valueSelection }).then(fullCommand => {
-        runCommand(fullCommand);
+        runCommand(context, fullCommand);
     });
 }
 
