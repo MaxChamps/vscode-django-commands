@@ -1,7 +1,9 @@
 # Change Log
 All notable changes to the "django-commands" extension will be documented in this file.
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+## 0.1.0
 
-## [Unreleased]
-- Initial release
+Initial release with very basic, but still useful, functionnalities.
+
+-   Listing all available Django commands and executing the selected one
+-   Listing all the previously executed Django commands (with arguments) and re-executing the selected one

@@ -4,6 +4,8 @@ A small VS Code extension for Django projects allowing developers to run command
 
 \* Extension still in development, improvements will be incremental. Contributions are welcome :)
 
+\* Only supports Unix OS for now. Although it may work on Windows, official support coming soon.
+
 ## Features
 
 ### List and run commands
@@ -36,12 +38,3 @@ This extension contributes the following settings:
 
 -   `djangoCommands.historyMaxLength`: Number of commands previously executed listed by 'Django Commands: History'
 -   `djangoCommands.showTerminalOnCommand`: Open (or don't open) the terminal when a Django command is executed to see its progress
-
-## Release Notes
-
-### 0.1.0
-
-Initial release with very basic, but still useful, functionnalities.
-
--   Listing all available Django commands and executing the selected one
--   Listing all the previously executed Django commands (with arguments) and re-executing the selected one
