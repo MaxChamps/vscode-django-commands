@@ -3,14 +3,27 @@
     "displayName": "Django Commands",
     "description": "Find and run Django commands easily without leaving VS Code.",
     "publisher": "MaxChamps",
-    "repository": "git@github.com:MaxChamps/django-commands.git",
-    "version": "0.1.0",
+    "bugs": {
+		"url": "https://github.com/MaxChamps/django-commands/issues",
+		"email": "maxime.champagne94@gmail.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/MaxChamps/django-commands"
+	},
+	"homepage": "https://github.com/MaxChamps/django-commands/blob/master/README.md",
+    "version": "0.0.0",
     "engines": {
-        "vscode": "^1.31.0"
+        "vscode": "^1.0.0"
     },
     "categories": [
         "Other"
     ],
+    "icon": "doc/logo.png",
+    "galleryBanner": {
+		"color": "#092E20",
+		"theme": "dark"
+	},
     "activationEvents": [
         "onCommand:djangoCommands.run",
         "onCommand:djangoCommands.history"
