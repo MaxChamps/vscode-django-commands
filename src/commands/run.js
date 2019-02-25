@@ -5,7 +5,7 @@ const util = require("../util");
 
 const { runCommand } = require("./common");
 
-const { NOT_DJANGO_PROJECT_MSG, ERROR_MSG } = require("../constants");
+const { NOT_DJANGO_PROJECT_MSG, ERROR_MSG, MANAGE_FILE } = require("../constants");
 
 const WORKSPACE_PATH = vscode.workspace.rootPath;
 const PYTHON_PATH = vscode.workspace.getConfiguration("python").get("pythonPath");
@@ -35,15 +35,17 @@ function execute(context) {
 function showAvailableCommands(context) {
     // Retrieving the commands this way to not only include the commands created
     // inside the project, but also the ones included with Django.
-    const command = `cd ${WORKSPACE_PATH} && ${PYTHON_PATH} manage.py help --commands`;
+    const command = `cd ${WORKSPACE_PATH} && ${PYTHON_PATH} ${MANAGE_FILE} help --commands`;
 
     cp.exec(command, (err, stdout) => {
         if (err) {
             vscode.window.showErrorMessage(ERROR_MSG);
             return;
         }
-        // Commands are listed in the shell, each on their own line.
-        const commands = stdout.split("\n");
+        // Commands are listed in the shell, each on their own line, and removing the last item
+        // because it is always an empty line.
+        let commands = stdout.split("\n");
+        commands.splice(-1);
 
         vscode.window.showQuickPick(commands).then(selectedCommand => {
             selectCommand(context, selectedCommand);

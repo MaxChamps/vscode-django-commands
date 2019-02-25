@@ -33,7 +33,7 @@ function showCommandHistory(context) {
     const extensionState = context.workspaceState;
     let executedCommands = extensionState.get(STATE_COMMANDS_KEY);
 
-    if (executedCommands === undefined || executedCommands.length == 0) {
+    if (executedCommands === undefined || executedCommands.length === 0) {
         vscode.window.showInformationMessage(NO_COMMANDS_WARNING_MSG);
         return;
     }
