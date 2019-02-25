@@ -1,71 +1,71 @@
 {
-    "name": "django-commands",
-    "displayName": "Django Commands",
-    "description": "Find and run Django commands easily without leaving VS Code.",
-    "publisher": "MaxChamps",
-    "bugs": {
-		"url": "https://github.com/MaxChamps/django-commands/issues",
-		"email": "maxime.champagne94@gmail.com"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/MaxChamps/django-commands"
-	},
-	"homepage": "https://github.com/MaxChamps/django-commands/blob/master/README.md",
-    "version": "0.0.0",
-    "engines": {
-        "vscode": "^1.0.0"
-    },
-    "categories": [
-        "Other"
+  "name": "django-commands",
+  "displayName": "Django Commands",
+  "description": "Find and run Django commands easily without leaving VS Code.",
+  "publisher": "MaxChamps",
+  "bugs": {
+    "url": "https://github.com/MaxChamps/django-commands/issues",
+    "email": "maxime.champagne94@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MaxChamps/django-commands"
+  },
+  "homepage": "https://github.com/MaxChamps/django-commands/blob/master/README.md",
+  "version": "0.1.0",
+  "engines": {
+    "vscode": "^1.0.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "icon": "doc/logo.png",
+  "galleryBanner": {
+    "color": "#092E20",
+    "theme": "dark"
+  },
+  "activationEvents": [
+    "onCommand:djangoCommands.run",
+    "onCommand:djangoCommands.history"
+  ],
+  "main": "./src/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "djangoCommands.run",
+        "title": "Django Commands: Run"
+      },
+      {
+        "command": "djangoCommands.history",
+        "title": "Django Commands: History"
+      }
     ],
-    "icon": "doc/logo.png",
-    "galleryBanner": {
-		"color": "#092E20",
-		"theme": "dark"
-	},
-    "activationEvents": [
-        "onCommand:djangoCommands.run",
-        "onCommand:djangoCommands.history"
-    ],
-    "main": "./src/extension.js",
-    "contributes": {
-        "commands": [
-            {
-                "command": "djangoCommands.run",
-                "title": "Django Commands: Run"
-            },
-            {
-                "command": "djangoCommands.history",
-                "title": "Django Commands: History"
-            }
-        ],
-        "configuration": {
-            "type": "object",
-            "title": "Django Commands configuration",
-            "properties": {
-                "djangoCommands.historyMaxLength": {
-                    "type": "number",
-                    "default": 100,
-                    "description": "Number of commands previously executed listed on 'Django Commands: History'."
-                },
-                "djangoCommands.showTerminalOnCommand": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Open terminal when a Django command is executed to see its progress."
-                }
-            }
+    "configuration": {
+      "type": "object",
+      "title": "Django Commands configuration",
+      "properties": {
+        "djangoCommands.historyMaxLength": {
+          "type": "number",
+          "default": 100,
+          "description": "Number of commands previously executed listed on 'Django Commands: History'."
+        },
+        "djangoCommands.showTerminalOnCommand": {
+          "type": "boolean",
+          "default": true,
+          "description": "Open terminal when a Django command is executed to see its progress."
         }
-    },
-    "scripts": {
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "node ./node_modules/vscode/bin/test"
-    },
-    "devDependencies": {
-        "typescript": "^3.3.1",
-        "vscode": "^1.1.28",
-        "eslint": "^5.13.0",
-        "@types/node": "^10.12.21",
-        "@types/mocha": "^2.2.42"
+      }
     }
+  },
+  "scripts": {
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "node ./node_modules/vscode/bin/test"
+  },
+  "devDependencies": {
+    "typescript": "^3.3.1",
+    "vscode": "^1.1.28",
+    "eslint": "^5.13.0",
+    "@types/node": "^10.12.21",
+    "@types/mocha": "^2.2.42"
+  }
 }
