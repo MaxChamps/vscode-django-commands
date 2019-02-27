@@ -12,7 +12,7 @@
     "url": "https://github.com/MaxChamps/django-commands"
   },
   "homepage": "https://github.com/MaxChamps/django-commands/blob/master/README.md",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "engines": {
     "vscode": "^1.0.0"
   },
