@@ -1,8 +1,6 @@
 const vscode = require("vscode");
 
-const util = require("../util");
-
-const { runCommand } = require("./common");
+const { runCommand, findManageFiles } = require("./common");
 
 const { NOT_DJANGO_PROJECT_MSG, NO_COMMANDS_WARNING_MSG, STATE_COMMANDS_KEY } = require("../constants");
 
@@ -13,11 +11,13 @@ const { NOT_DJANGO_PROJECT_MSG, NO_COMMANDS_WARNING_MSG, STATE_COMMANDS_KEY } = 
  * @param {vscode.ExtensionContext} context
  */
 function execute(context) {
-    util.isDjangoProject().then(isDjangoProject => {
-        if (!isDjangoProject) {
+    console.log("history");
+    findManageFiles().then(manageFiles => {
+        if (manageFiles.length === 0) {
             vscode.window.showErrorMessage(NOT_DJANGO_PROJECT_MSG);
         } else {
-            showCommandHistory(context);
+            // TODO: handle multiple manage.py files. Assuming there is only one manage.py file for now.
+            showCommandHistory(context, manageFiles[0].path);
         }
     });
 }
@@ -27,8 +27,9 @@ function execute(context) {
  * and lists them in a selectable quick pick.
  *
  * @param {vscode.ExtensionContext} context
+ * @param {string} manageFile the path of the manage.py file that will be used to execute the command
  */
-function showCommandHistory(context) {
+function showCommandHistory(context, manageFile) {
     // Getting the workspace state of the extension and needed configurations
     const extensionState = context.workspaceState;
     let executedCommands = extensionState.get(STATE_COMMANDS_KEY);
@@ -39,7 +40,7 @@ function showCommandHistory(context) {
     }
 
     vscode.window.showQuickPick(executedCommands).then(fullCommand => {
-        runCommand(context, fullCommand);
+        runCommand(context, manageFile, fullCommand);
     });
 }
 

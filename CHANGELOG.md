@@ -1,5 +1,8 @@
 # Change Log
-All notable changes to the "django-commands" extension will be documented in this file.
+
+## 0.1.2
+
+- `manage.py` file dynamically located within the project, so it does not have to be at the root of the workspace anymore (still assuming there is only one Django project inside the workspace though, for now)
 
 ## 0.1.0 - 0.1.1
 

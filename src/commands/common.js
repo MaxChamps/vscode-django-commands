@@ -21,12 +21,13 @@ const CONFIGURATION = vscode.workspace.getConfiguration(CONFIGURATION_NAMESPACE)
  * or simply get the output if needed.
  *
  * @param {vscode.ExtensionContext} context
+ * @param {string} manageFile the path of the manage.py file that will be used to execute the command
  * @param {string} fullCommand The Django command (with arguments)
  */
-function runCommand(context, fullCommand) {
+function runCommand(context, manageFile, fullCommand) {
     if (fullCommand === undefined || fullCommand === null || fullCommand === "") return;
 
-    const command = `cd ${WORKSPACE_PATH} && ${PYTHON_PATH} ${MANAGE_FILE} ${fullCommand}`.trim();
+    const command = `cd ${WORKSPACE_PATH} && ${PYTHON_PATH} ${manageFile} ${fullCommand}`.trim();
 
     let terminal = vscode.window.activeTerminal;
     if (terminal === undefined) terminal = vscode.window.createTerminal(TERMINAL_TITLE);
@@ -76,14 +77,14 @@ function saveCommand(context, fullCommand) {
 /**
  * Validates that the current project is a Django app.
  */
-function isDjangoProject() {
-    return vscode.workspace.findFiles(MANAGE_FILE).then(files => {
-        if (files.length === 0) return false;
-        return true;
+function findManageFiles() {
+    return vscode.workspace.findFiles(`**/${MANAGE_FILE}`).then(files => {
+        return files;
     });
 }
 
+
 module.exports = {
     runCommand,
-    isDjangoProject
+    findManageFiles
 };

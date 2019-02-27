@@ -1,11 +1,9 @@
 const vscode = require("vscode");
 const cp = require("child_process");
 
-const util = require("../util");
+const { runCommand, findManageFiles } = require("./common");
 
-const { runCommand } = require("./common");
-
-const { NOT_DJANGO_PROJECT_MSG, ERROR_MSG, MANAGE_FILE } = require("../constants");
+const { NOT_DJANGO_PROJECT_MSG, ERROR_MSG } = require("../constants");
 
 const WORKSPACE_PATH = vscode.workspace.rootPath;
 const PYTHON_PATH = vscode.workspace.getConfiguration("python").get("pythonPath");
@@ -17,11 +15,12 @@ const PYTHON_PATH = vscode.workspace.getConfiguration("python").get("pythonPath"
  * @param {vscode.ExtensionContext} context
  */
 function execute(context) {
-    util.isDjangoProject().then(isDjangoProject => {
-        if (!isDjangoProject) {
+    findManageFiles().then(manageFiles => {
+        if (manageFiles.length === 0) {
             vscode.window.showErrorMessage(NOT_DJANGO_PROJECT_MSG);
         } else {
-            showAvailableCommands(context);
+            // TODO: handle multiple manage.py files. Assuming there is only one manage.py file for now.
+            showAvailableCommands(context, manageFiles[0].path);
         }
     });
 }
@@ -31,11 +30,12 @@ function execute(context) {
  * in a quick pick.
  *
  * @param {vscode.ExtensionContext} context
+ * @param {string} manageFile the path of the manage.py file that will be used to execute the command
  */
-function showAvailableCommands(context) {
+function showAvailableCommands(context, manageFile) {
     // Retrieving the commands this way to not only include the commands created
     // inside the project, but also the ones included with Django.
-    const command = `cd ${WORKSPACE_PATH} && ${PYTHON_PATH} ${MANAGE_FILE} help --commands`;
+    const command = `cd ${WORKSPACE_PATH} && ${PYTHON_PATH} ${manageFile} help --commands`;
 
     cp.exec(command, (err, stdout) => {
         if (err) {
@@ -48,7 +48,7 @@ function showAvailableCommands(context) {
         commands.splice(-1);
 
         vscode.window.showQuickPick(commands).then(selectedCommand => {
-            selectCommand(context, selectedCommand);
+            selectCommand(context, manageFile, selectedCommand);
         });
     });
 }
@@ -58,9 +58,10 @@ function showAvailableCommands(context) {
  * Opens a user input box with the selected command prefilled.
  *
  * @param {vscode.ExtensionContext} context
+ * @param {string} manageFile the path of the manage.py file that will be used to execute the command
  * @param {string} selectedDjangoCommand
  */
-function selectCommand(context, selectedDjangoCommand) {
+function selectCommand(context, manageFile, selectedDjangoCommand) {
     // Happens usually when a user clicks outside the quick pick or press
     // escape.
     if (selectedDjangoCommand === undefined) return;
@@ -71,7 +72,7 @@ function selectCommand(context, selectedDjangoCommand) {
     // When both values are the same, the cursor is set at the given character.
     const valueSelection = [value.length, value.length];
     vscode.window.showInputBox({ value, valueSelection }).then(fullCommand => {
-        runCommand(context, fullCommand);
+        runCommand(context, manageFile, fullCommand);
     });
 }
 

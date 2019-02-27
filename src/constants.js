@@ -1,5 +1,5 @@
 exports.NOT_DJANGO_PROJECT_MSG = "Django commands must be executed within a Django project workspace.";
-exports.ERROR_MSG = "An error occured, please try again.";
+exports.ERROR_MSG = "An error occured. It may, or may not, be related to your Django configuration. Please try again.";
 exports.NO_COMMANDS_WARNING_MSG =
     "No Django command found for this workspace. Please use the 'Django Commands: Run' to execute your first command.";
 exports.SUCCESS_MSG = "Django command launched. Log is available in the VS Code integrated terminal.";
