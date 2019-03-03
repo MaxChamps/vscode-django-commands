@@ -10,10 +10,6 @@ const {
     SUCCESS_MSG
 } = require("../constants");
 
-const WORKSPACE_PATH = vscode.workspace.rootPath;
-const PYTHON_PATH = vscode.workspace.getConfiguration("python").get("pythonPath");
-const CONFIGURATION = vscode.workspace.getConfiguration(CONFIGURATION_NAMESPACE);
-
 /**
  * Runs the command in the integrated terminal of VS Code.
  *
@@ -27,7 +23,8 @@ const CONFIGURATION = vscode.workspace.getConfiguration(CONFIGURATION_NAMESPACE)
 function runCommand(context, manageFile, fullCommand) {
     if (fullCommand === undefined || fullCommand === null || fullCommand === "") return;
 
-    const command = `cd ${WORKSPACE_PATH} && ${PYTHON_PATH} ${manageFile} ${fullCommand}`.trim();
+    const pythonPath = vscode.workspace.getConfiguration("python").get("pythonPath");
+    const command = `${pythonPath} ${manageFile} ${fullCommand}`.trim();
 
     let terminal = vscode.window.activeTerminal;
     if (terminal === undefined) terminal = vscode.window.createTerminal(TERMINAL_TITLE);
@@ -35,7 +32,8 @@ function runCommand(context, manageFile, fullCommand) {
 
     saveCommand(context, fullCommand);
 
-    if (CONFIGURATION.get(SHOW_TERMINAL_PROPERTY)) terminal.show();
+    const conf = vscode.workspace.getConfiguration(CONFIGURATION_NAMESPACE);
+    if (conf.get(SHOW_TERMINAL_PROPERTY)) terminal.show();
 }
 
 /**
@@ -50,7 +48,10 @@ function saveCommand(context, fullCommand) {
     // Getting the workspace state of the extension and needed configurations
     const extensionState = context.workspaceState;
     let executedCommands = extensionState.get(STATE_COMMANDS_KEY);
-    const historyMaxLength = CONFIGURATION.get(HISTORY_MAX_LENGTH_PROPERTY);
+
+    const conf = vscode.workspace.getConfiguration(CONFIGURATION_NAMESPACE);
+    const historyMaxLength = conf.get(HISTORY_MAX_LENGTH_PROPERTY);
+    console.log(historyMaxLength);
 
     // Initializing the array of history on first command executed
     if (executedCommands === undefined) {
@@ -82,7 +83,6 @@ function findManageFiles() {
         return files;
     });
 }
-
 
 module.exports = {
     runCommand,

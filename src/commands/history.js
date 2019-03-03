@@ -11,7 +11,6 @@ const { NOT_DJANGO_PROJECT_MSG, NO_COMMANDS_WARNING_MSG, STATE_COMMANDS_KEY } = 
  * @param {vscode.ExtensionContext} context
  */
 function execute(context) {
-    console.log("history");
     findManageFiles().then(manageFiles => {
         if (manageFiles.length === 0) {
             vscode.window.showErrorMessage(NOT_DJANGO_PROJECT_MSG);

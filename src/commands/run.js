@@ -3,10 +3,13 @@ const cp = require("child_process");
 
 const { runCommand, findManageFiles } = require("./common");
 
-const { NOT_DJANGO_PROJECT_MSG, ERROR_MSG } = require("../constants");
-
-const WORKSPACE_PATH = vscode.workspace.rootPath;
-const PYTHON_PATH = vscode.workspace.getConfiguration("python").get("pythonPath");
+const {
+    NOT_DJANGO_PROJECT_MSG,
+    ERROR_MSG,
+    PYTHON,
+    CONFIGURATION_PYTHON_PATH,
+    LOAD_COMMANDS_MSG
+} = require("../constants");
 
 /**
  * Entry point of the command. Validates that the project is a Django app then
@@ -33,9 +36,13 @@ function execute(context) {
  * @param {string} manageFile the path of the manage.py file that will be used to execute the command
  */
 function showAvailableCommands(context, manageFile) {
+    vscode.window.showInformationMessage(LOAD_COMMANDS_MSG);
+
     // Retrieving the commands this way to not only include the commands created
     // inside the project, but also the ones included with Django.
-    const command = `cd ${WORKSPACE_PATH} && ${PYTHON_PATH} ${manageFile} help --commands`;
+    const pythonPath = vscode.workspace.getConfiguration(PYTHON).get(CONFIGURATION_PYTHON_PATH);
+
+    const command = `${pythonPath} ${manageFile} help --commands`;
 
     cp.exec(command, (err, stdout) => {
         if (err) {
